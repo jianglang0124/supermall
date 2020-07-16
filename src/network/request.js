@@ -5,7 +5,7 @@ export function request(config){
     // 1 创建 axios 的实例
   const instance = axios.create({
       // baseURL:"http://123.207.32.32:8000",
-      baseURL:"http://152.136.185.210:8000/api/n3",
+      //  加老师的微信获取最新的接口
       timeout: 5000
   })
   // 2 axios 的拦截器
