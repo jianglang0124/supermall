@@ -8,7 +8,7 @@
     </div>
     <div class="info-key">{{detailInfo.detailImage[0].key}}</div>
     <div class="info-list">
-      <img v-for="(item, index) in detailInfo.detailImage[0].list" :src="item" :key ="index" alt="" @load="imgLoad">
+      <img v-for="(item, index) in detailInfo.detailImage[0].list" :src="item" :key ="index"  @load="imgLoad" alt="">
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
   .goods-info {
     padding: 20px 0;
     border-bottom: 5px solid #f2f5f8;
@@ -91,7 +91,16 @@
     font-size: 15px;
   }
 
+  .info-list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
   .info-list img {
-    width: 100%;
+    padding: 20px 5px 20px 5px;
+    max-width: 100%;
   }
 </style>

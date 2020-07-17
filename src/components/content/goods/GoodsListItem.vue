@@ -1,6 +1,6 @@
 <template>
     <div class="goods-item">
-         <img :src="goodsItem.show.img" alt="" @load="imageLoad" @click="imageClick(goodsItem.iid)">
+         <img :src="showImage" alt="" @load="imageLoad" @click="imageClick(goodsItem.iid)">
          <div class="goods-info">
              <p>{{goodsItem.titles}}</p>
              <span  class="price">{{goodsItem.price}}</span>
@@ -20,14 +20,18 @@ export default {
             }
         }
     },
+    computed:{
+      //  图片的取值会不同 这边搞一个计算的属性
+      showImage(){
+        return this.goodsItem.image || this.goodsItem.show.img
+      }
+    },
     methods:{
       imageLoad(){
            //图片加载完 采用 时间总线的方法 发出事件
            this.$bus.$emit("itemimageLoad")
-          //  console.log("imageLoad");
       },
       imageClick(iid){
-        // console.log(iid) 
         // 进行跳转
         this.$router.push('/detail/'+iid)
       }
@@ -37,7 +41,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /* .goods-item{
     padding-bottom: 40px;
 } */

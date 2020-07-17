@@ -15,8 +15,7 @@
     </Scroll>
     <!-- 组件的点击事件 要 加上 native 才能进行监听 -->
    <BackTop @click.native="BackClick" v-show="isShowBackTop"></BackTop>
-    
-
+   
    
 </div>
 </template>
@@ -27,6 +26,7 @@ import RecommendView from './childcomps/RecommendView'
 import FeatureView from './childcomps/FeatureView'
 import GoodsList from 'components/content/goods/GoodsList'
 
+
 import NavBar  from 'components/common/navbar/NavBar'
 import TabControl from 'components/content/tabControl/TabControl'
 import Scroll from 'components/common/scroll/Scroll'
@@ -34,6 +34,8 @@ import BackTop  from 'components/content/backtop/BackTop'
 
 import {getHomeMultidata,getHomeGoods} from 'network/home'
 import {debounce} from 'common/until'
+import {itemListenerMixin}  from "common/mixin"
+
 export default {
    name : 'Home',
    components:{
@@ -44,8 +46,7 @@ export default {
       NavBar,
       TabControl,
       Scroll,
-      BackTop
-
+      BackTop,
    },
    data(){
        return {
@@ -60,7 +61,7 @@ export default {
           currentType:'pop',
           isShowBackTop :false,
           tabOffsetTop: 0,
-          saveY:0
+          saveY:0,
        }
    },
    created(){
@@ -88,15 +89,22 @@ export default {
    },
    // 组件离开的时候
    deactivated(){
+      // 记录Y值s
      this.saveY = this.$refs.Scroll.getScrollY()
+     //  取消全局的事件监听
+     console.log("取消监听");
+     this.$bus.$off("itemimageLoad",this.itemImgListener);
    },
+   mixins: [itemListenerMixin],
    mounted(){
+       console.log("我是home");
       // 还是解决不了这个 refresh 问题
       // 1 图片的加载完成
-      const refresh= debounce( this.$refs.Scroll.refresh,200)
-      this.$bus.$on("itemimageLoad",()=>{
-           refresh()
-      })
+      // const newRefresh= debounce(this.$refs.Scroll.refresh,200)
+      //  this.itemImgListener = ()=>{
+      //      newRefresh()
+      //  }
+      // this.$bus.$on("itemimageLoad",this.itemImgListener)
       //  必须知道滚动到多少的时候 才开始吸顶 
       // 拿到 offsetTop  这边获取是不正确的 以为这边还没有将图片计算在内
       // this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
@@ -116,8 +124,6 @@ export default {
          this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
          console.log(this.tabOffsetTop );
       },
-     
-
       tabClick(index){
         switch(index){
            case 0:

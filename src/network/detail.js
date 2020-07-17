@@ -9,6 +9,14 @@ export function getDetail(iid){
     })
 }
 
+//  推荐的信息 
+export function getRecommend(){
+  return request({
+    url:'./recommend'
+  })
+ 
+}
+
 
 export class Goods {
     constructor(itemInfo, columns, services) {
